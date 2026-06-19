@@ -1,37 +1,51 @@
+import os
+import time
 import psutil
 import socket
-import time
-import os
+
+def get_ip():
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        ip = s.getsockname()[0]
+        s.close()
+        return ip
+    except:
+        return "No Network"
 
 def get_cpu_temp():
-    temp = os.popen("vcgencmd measure_temp").readline()
-    return temp.replace("temp=", "").strip()
+    try:
+        temp = os.popen("vcgencmd measure_temp").readline()
+        return temp.replace("temp=", "").strip()
+    except:
+        return "Unavailable"
+
+def get_uptime():
+    uptime_seconds = time.time() - psutil.boot_time()
+    hours = int(uptime_seconds // 3600)
+    minutes = int((uptime_seconds % 3600) // 60)
+    return f"{hours}h {minutes}m"
 
 while True:
-    os.system('clear')
+    os.system("clear")
 
-    cpu_usage = psutil.cpu_percent()
-    ram = psutil.virtual_memory()
-    disk = psutil.disk_usage('/')
-    uptime = time.time() - psutil.boot_time()
+    print("=" * 40)
+    print("      CYBERDECK DASHBOARD V2")
+    print("=" * 40)
 
-    hours = int(uptime // 3600)
-    minutes = int((uptime % 3600) // 60)
+    print(f"CPU Usage:     {psutil.cpu_percent()}%")
+    print(f"CPU Temp:      {get_cpu_temp()}")
+    print(f"RAM Usage:     {psutil.virtual_memory().percent}%")
+    print(f"Disk Usage:    {psutil.disk_usage('/').percent}%")
+    print(f"IP Address:    {get_ip()}")
+    print(f"Uptime:        {get_uptime()}")
 
-    hostname = socket.gethostname()
-    ip_address = socket.gethostbyname(hostname)
+    print()
+    print(time.strftime("%Y-%m-%d"))
+    print(time.strftime("%H:%M:%S"))
 
-    print("========================")
-    print(" CYBERDECK SYSTEM STATUS ")
-    print("========================\n")
+    print()
+    print("STATUS: ONLINE")
+    print("=" * 40)
 
-    print(f"CPU Usage:      {cpu_usage}%")
-    print(f"RAM Usage:      {ram.percent}%")
-    print(f"CPU Temp:       {get_cpu_temp()}")
-    print(f"Disk Usage:     {disk.percent}%")
-    print(f"System Uptime:  {hours}h {minutes}m")
-    print(f"IP Address:     {ip_address}")
-
-    print("\nSTATUS: STABLE")
-
-    time.sleep(2)
+    time.sleep(1)
