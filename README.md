@@ -30,6 +30,14 @@ Completed
 * Portable battery power setup
 * Initial Python system monitor project completed
 
+## Version 2
+
+- Live CPU monitoring
+- CPU temperature display
+- Uptime tracking
+- Improved cyberdeck dashboard UI
+
+  
 In Progress
 
 * Display orientation configuration
